@@ -28,13 +28,14 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 	os.Setenv("DB_USERNAME", "secret_username")
 	os.Setenv("DB_PASSWORD", "secret_password")
 	os.Setenv("DB_NAME", "secret_database_name")
+	os.Setenv("DB_HOSTNAME", "secret_hostname")
 
 	if r.Method == "POST" {
 		playerName := r.FormValue("playerName")
 
 		// Connect to the database (replace with your database credentials)
-		db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(localhost:3306)/%s",
-			os.Getenv("DB_USERNAME"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_NAME")))
+		db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:3306)/%s",
+			os.Getenv("DB_USERNAME"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_HOSTNAME"), os.Getenv("DB_NAME")))
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
